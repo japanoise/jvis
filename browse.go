@@ -133,7 +133,7 @@ func browseNode(node interface{}, breadcrumb string) {
 						}
 					}
 				}
-			case "RET", "l", "C-f":
+			case "RET", "l", "C-f", "RIGHT":
 				// useless switch, but it's the only way to get this reflection to compile without whinging
 				switch list.items[sel].child.(type) {
 				case map[string]interface{}, []interface{}:

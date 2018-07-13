@@ -17,7 +17,7 @@ with the vi or emacs editors.
 - `C-v`, `next`, `page down`: Go down one screen
 - `M-<`, `g`: Go to start of current node
 - `M->`, `G`: Go to end of current node
-- `RET`, `l`, `C-f`: Browse child node
+- `RET`, `l`, `C-f`, `RIGHT`: Browse child node
 - `C-l`, `C-g`, `C-b`, `h`, `LEFT`: Go to parent node (or quit, if at root)
 - `C-s`, `/`, `n`: Search forward/next search result
 - `C-r`, `?`, `p`: Search back/previous search result
