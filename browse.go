@@ -2,6 +2,7 @@ package main
 
 import (
 	"encoding/json"
+	"fmt"
 	"os"
 	"strings"
 
@@ -138,6 +139,26 @@ func browseNode(node interface{}, breadcrumb string) {
 				case map[string]interface{}, []interface{}:
 					browseNode(list.items[sel].child, breadcrumb+list.items[sel].key+"/")
 				}
+			case "C-x", "x":
+				filename := termutil.Prompt("Export to", func(ssx, ssy int) {
+					termutil.ClearLine(ssx, ssy-1)
+					drawNodeBrowser(ssx, ssy, scroll, sel, breadcrumb, &list)
+				})
+				termbox.HideCursor()
+				if filename == "" {
+					break
+				}
+
+				file, err := os.Create(filename)
+				if err != nil {
+					break
+				}
+
+				for _, item := range list.items {
+					fmt.Fprintf(file, "%s\t%s\n", item.key, item.value)
+				}
+
+				file.Close()
 			}
 			if search != "" && pev != "C-s" && pev != "/" && pev != "n" && pev != "C-r" && pev != "?" && pev != "p" {
 				search = ""
