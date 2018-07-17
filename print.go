@@ -9,6 +9,7 @@ import (
 
 type kvList struct {
 	items    []kv
+	array    bool
 	keyWidth int
 }
 
@@ -21,8 +22,10 @@ type kv struct {
 func printJSONNode(node interface{}) kvList {
 	var items []kv
 	keyWidth := 0
+	var ret kvList
 	switch v := node.(type) {
 	case []interface{}:
+		ret.array = true
 		for i, child := range v {
 			items = append(items, kv{key: fmt.Sprint(i), value: printJSONNodeShort(child), child: child})
 			w := termutil.RunewidthStr(items[i].key)
@@ -44,7 +47,9 @@ func printJSONNode(node interface{}) kvList {
 	default:
 		items = []kv{kv{key: "", value: printJSONNodeShort(node), child: v}}
 	}
-	return kvList{items: items, keyWidth: keyWidth}
+	ret.items = items
+	ret.keyWidth = keyWidth
+	return ret
 }
 
 func printJSONNodeShort(node interface{}) string {

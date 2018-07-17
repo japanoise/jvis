@@ -15,7 +15,7 @@ const topOffset int = 2
 func browse(data []byte) {
 	var rootNode interface{}
 	json.Unmarshal(data, &rootNode)
-	browseNode(rootNode, "/")
+	browseNode(rootNode, ".")
 }
 
 func drawNodeBrowser(sx, sy, scroll, sel int, breadcrumb string, list *kvList) {
@@ -137,7 +137,15 @@ func browseNode(node interface{}, breadcrumb string) {
 				// useless switch, but it's the only way to get this reflection to compile without whinging
 				switch list.items[sel].child.(type) {
 				case map[string]interface{}, []interface{}:
-					browseNode(list.items[sel].child, breadcrumb+list.items[sel].key+"/")
+					if list.array {
+						browseNode(list.items[sel].child, breadcrumb+"["+list.items[sel].key+"]")
+					} else {
+						if breadcrumb == "." {
+							browseNode(list.items[sel].child, breadcrumb+list.items[sel].key)
+						} else {
+							browseNode(list.items[sel].child, breadcrumb+"."+list.items[sel].key)
+						}
+					}
 				}
 			case "C-x", "x":
 				filename := termutil.Prompt("Export to", func(ssx, ssy int) {
